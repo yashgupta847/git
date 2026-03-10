@@ -1,0 +1,31 @@
+<!doctype html>  
+<html>
+  <body>
+    <h1>WebRTC Starting</h1>
+    <button id="flip-button">Flip</button>
+    <video id="self" autoplay playsinline></video>
+    <script>
+      let front = true;
+      let stream;
+      const video = document.getElementById("self");
+      async function startCamera() {
+        if (stream) {
+          stream.getTracks().forEach((track) => track.stop());
+        }
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: {
+            width: 250,
+            height: 250,
+            facingMode: front ? "user" : "environment",
+          },
+        });
+        video.srcObject = stream;
+      }
+      document.getElementById("flip-button").onclick = () => {
+        front = !front;
+        startCamera();
+      };
+      startCamera();
+    </script>
+  </body>
